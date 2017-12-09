@@ -17,11 +17,17 @@
   </head>
 
   <body ng-app="problems" ng-cloak>
-    <md-content ng-controller="prompt" layout="column" layout-align="center start" layout-padding class="md-display-1">
+    <md-content ng-controller="prompt" layout="column" layout-align="center start" layout-padding class="md-headline">
       <div>{{ problem }}</div>
-      <div>= <input required placeholder="Enter your answer here." ng-model="answer" /></div>
-      <br />
-      <p class="md-button md-primary md-raised" ng-click="check">Check Answer</p>
+      <div>= <input required placeholder="Enter your answer here." ng-model="answer" ng-disable="status == 2"></input></div>
+      <p class="md-subhead">* Don't include parenthesis or positive signs.</p>
+      <p ng-class="{'md-button': 1, 'md-primary': (status != 1), 'md-warn': (status == 1), 'md-raised': 1}" ng-click="check()">
+	<ng-switch on="status">
+	  <span ng-switch-when="1">Nope. Try again.</span>
+	  <span ng-switch-when="2">Correct! Next problem.</span>
+	  <span ng-switch-default>Check Answer.</span>
+	</ng-switch>
+      </p>
     </md-content>
   </body>
 </html>
