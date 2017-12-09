@@ -13,19 +13,15 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-messages.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="asmd.js"></script>
   </head>
 
-  <body ng-app="topics" ng-cloak layout="row">
-    <md-content ng-controller="topiclist">
-      <md-list flex>
-	<md-subheader class="md-no-sticky">Select a topic.</md-subheader>
-	<md-list-item ng-repeat="topic in topics">
-	  <md-button ng-href="topics/{{ topic.link }}.html">
-	    <div class="md-title">{{ $index + 1 }}. <b>{{ topic.title }}</b></div>
-	  </md-button>
-	</md-list-item>
-      </md-list>
+  <body ng-app="problems" ng-cloak>
+    <md-content ng-controller="prompt" layout="column" layout-align="center start" layout-padding class="md-display-1">
+      <div>{{ problem }}</div>
+      <div>= <input required placeholder="Enter your answer here." ng-model="answer" /></div>
+      <br />
+      <p class="md-button md-primary md-raised" ng-click="check">Check Answer</p>
     </md-content>
   </body>
 </html>
