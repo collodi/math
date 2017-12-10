@@ -8,19 +8,31 @@ angular.module('problems', ['ngMaterial'])
 	var ops = ['+', '-', '\xd7', '\xf7'];
 	var get_prob = function () {
 	    var prob = [];
-	    var nterms = rand_num(2, 4);
-	    for (var i = 0; i < nterms - 1; i++)
-		prob.push(ops[rand_num(0, 3)]);
-
+	    var nums = [];
+	    var nterms = rand_num(2, 5);
+	    /* choose numbers at random */
 	    for (var i = 0; i < nterms; i++) {
 		var n = rand_num(-lim, lim);
 		if (n < 0)
 		    n = '(' + n + ')';
-		else if (n === 0 && prob[2 * i - 1] === '\xf7')
+		else if (n === 0)
 		    n += rand_num(1, lim);
 
-		prob.splice(2 * i, 0, n);
+		nums.push(n);
 	    }
+	    /* insert parenthesis at random */
+	    var nparen = rand_num(0, nterms - 2);
+	    if (nterms > 2 && nparen > 0) {
+		var pstart = rand_num(1, nterms - nparen) - 1;
+		nums[pstart] = '(' + nums[pstart];
+		nums[pstart + nparen] += ')';
+	    }
+	    /* choose & combine operators with numbers */
+	    for (var i = 0; i < nterms - 1; i++) {
+		prob.push(nums[i]);
+		prob.push(ops[rand_num(0, 3)]);
+	    }
+	    prob.push(nums[nterms - 1]);
 	    return prob.join(' ');
 	};
 
