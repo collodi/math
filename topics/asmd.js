@@ -7,7 +7,6 @@ angular.module('problems', ['ngMaterial'])
 	var lim = 30;
 	var ops = ['+', '-', '\xd7', '\xf7'];
 	var get_prob = function () {
-	    var prob = [];
 	    var nums = [];
 	    var nterms = rand_num(2, 5);
 	    /* choose numbers at random */
@@ -28,6 +27,7 @@ angular.module('problems', ['ngMaterial'])
 		nums[pstart + nparen] += ')';
 	    }
 	    /* choose & combine operators with numbers */
+	    var prob = [];
 	    for (var i = 0; i < nterms - 1; i++) {
 		prob.push(nums[i]);
 		prob.push(ops[rand_num(0, 3)]);
@@ -45,11 +45,6 @@ angular.module('problems', ['ngMaterial'])
 	};
 
 	$scope.check = function () {
-	    if ($scope.status === 2) {
-		$scope.go_next();
-		return;
-	    }
-
 	    count(2, 100);
 	    $scope.status = 1;
 	    if ($scope.answer === null)
@@ -57,8 +52,12 @@ angular.module('problems', ['ngMaterial'])
 
 	    var ans = eval($scope.answer.replace(' ', ''));
 	    var prob = eval($scope.problem.replace(/\xd7/g, '*').replace(/\xf7/g, '/'));
-	    if (Math.abs(ans - prob) < 0.0001)
-		$scope.status = 2;
+	    if (Math.abs(ans - prob) < 0.0001) {
+		if ($scope.status !== 2)
+		    $scope.status = 2;
+		else
+		    $scope.go_next();
+	    }
 	};
 
 	$scope.go_next = function () {
