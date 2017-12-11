@@ -1,5 +1,5 @@
 angular.module('problems', ['ngMaterial'])
-    .controller('prompt', ['$scope', '$timeout', '$document', function($scope, $timeout, $document) {
+    .controller('prompt', ['$scope', '$timeout', function($scope, $timeout) {
 	var rand_num = function (min, max) {
 	    return Math.floor(Math.random() * (max - min + 1)) + min;
 	};
