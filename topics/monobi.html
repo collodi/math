@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
 
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-sanitize.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-animate.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-aria.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-messages.min.js"></script>
@@ -18,9 +19,13 @@
 
   <body ng-app="problems" ng-cloak>
     <md-content ng-controller="prompt" ng-submit="check()" layout="column" layout-align="center start" layout-padding class="md-headline">
-      <div>{{ problem }}</div>
+      <span class="md-subhead">Distribute.</span>
+      <div ng-bind-html="problem"></div>
       <div>= <input autofocus placeholder="Enter your answer here." ng-model="answer" ng-keypress="press($event)"></input></div>
-      <span class="md-subhead">* Don't include parenthesis or leading positive signs.</span>
+      <span class="md-subhead">
+	* Don't include parenthesis or leading positive signs. <br />
+	* Put numbers before variables.
+      </span>
       <div layout="row" layout-padding layout-align="center center">
 	<md-progress-circular md-diameter="30" md-mode="determinate" value="{{ 100 - (timer * 50) }}"></md-progress-circular>
 	<p ng-class="{'md-button md-raised': 1, 'md-primary': (status !== 1), 'md-warn': (status === 1)}" ng-click="check()">
