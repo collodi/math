@@ -6,7 +6,7 @@ angular.module('problems', ['ngMaterial'])
 
 	var lim = 30;
 	var ops = ['+', '-', '\xd7', '\xf7'];
-	var get_prob = function () {
+	$scope.gen_prob = function () {
 	    var nums = [];
 	    var nterms = rand_num(2, 5);
 	    /* choose numbers at random */
@@ -33,7 +33,7 @@ angular.module('problems', ['ngMaterial'])
 		prob.push(ops[rand_num(0, 3)]);
 	    }
 	    prob.push(nums[nterms - 1]);
-	    return prob.join(' ');
+	    $scope.problem = prob.join(' ');
 	};
 
 	var count = function (n, t) {
@@ -46,9 +46,10 @@ angular.module('problems', ['ngMaterial'])
 
 	$scope.check = function () {
 	    count(2, 100);
-	    $scope.status = 1;
-	    if ($scope.answer === null)
+	    if ($scope.answer === null) {
+		$scope.status = 1;
 		return;
+	    }
 
 	    var ans = eval($scope.answer.replace(' ', ''));
 	    var prob = eval($scope.problem.replace(/\xd7/g, '*').replace(/\xf7/g, '/'));
@@ -57,14 +58,16 @@ angular.module('problems', ['ngMaterial'])
 		    $scope.status = 2;
 		else
 		    $scope.go_next();
+	    } else {
+		$scope.status = 1;
 	    }
 	};
 
 	$scope.go_next = function () {
 	    $scope.answer = null;
-	    $scope.problem = get_prob();
 	    $scope.status = 0; /* 0: first try, 1: incorrect, 2: solved */
 	    $scope.timer = 0;
+	    $scope.gen_prob();
 	};
 
 	$scope.press = function (ev) {
