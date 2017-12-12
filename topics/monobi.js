@@ -60,6 +60,9 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 	    }
 
 	    /* check answer */
+	    // parse coeff
+	    // parse variable
+	    // parse exponent if exists
 	    if (false) {
 		if ($scope.status !== 2)
 		    $scope.status = 2;
