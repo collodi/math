@@ -78,18 +78,21 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 	    }
 
 	    /* check answer */
-	    var ans_parsed = math.parse(add_star($scope.answer));
-
 	    var correct = true;
-	    var ans_dict = {};
-	    for (var i = 0; i < 100; i++) {
-		for (var j = 0; j < vars.length; j++)
-		    ans_dict[vars[j]] = rand_num(-100, 100);
+	    try {
+		var ans_parsed = math.parse(add_star($scope.answer));
+		var ans_dict = {};
+		for (var i = 0; i < 100; i++) {
+		    for (var j = 0; j < vars.length; j++)
+			ans_dict[vars[j]] = rand_num(-100, 100);
 
-		if (ans_parsed.eval(ans_dict) !== $scope.prob.parsed.eval(ans_dict)) {
-		    correct = false;
-		    break;
+		    if (ans_parsed.eval(ans_dict) !== $scope.prob.parsed.eval(ans_dict)) {
+			correct = false;
+			break;
+		    }
 		}
+	    } catch (e) {
+		correct = false;
 	    }
 
 	    if (correct) {
