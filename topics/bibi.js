@@ -34,7 +34,7 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 
 	    for (var i = 0; i < term.variable.length; i++) {
 		s += term.variable[i];
-		if (term.exp > 1) {
+		if (term.exp[i] > 1) {
 		    if (!caret)
 			s += term.exp[i].toString().sup();
 		    else
