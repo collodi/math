@@ -13,7 +13,7 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 	};
 
 	const ops = ['+', '-'];
-	const vars = ['x', 'y', 'z', 'g', 'h'];
+	const vars = ['x', 'y', 'z'];
 	const get_term = function (pos = true) {
 	    const nvars = rand_num(1, 3);
 	    /* choose random number of vars */
@@ -25,7 +25,7 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 		     variable: vs, exp: shf_exp };
 	};
 
-	const term_to_str = function (term) {
+	const term_to_str = function (term, caret=false) {
 	    var s = '';
 	    if (term.cf === -1)
 		s += '-';
@@ -34,10 +34,22 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 
 	    for (var i = 0; i < term.variable.length; i++) {
 		s += term.variable[i];
-		if (term.exp > 1)
-		    s += '<sup>' + term.exp[i] + '</sup>';
+		if (term.exp > 1) {
+		    if (!caret)
+			s += term.exp[i].toString().sup();
+		    else
+			s += '^(' + term.exp[i] + ')';
+		}
 	    }
 	    return s;
+	};
+
+	const add_star = function (expr) {
+	    for (var i = expr.length - 2; i >= 0; i--) {
+		if (vars.indexOf(expr[i]) > -1 && vars.indexOf(expr[i + 1]) > -1)
+		    expr = expr.substring(0, i + 1) + '*' + expr.substring(i + 1);
+	    }
+	    return expr;
 	};
 
 	$scope.gen_prob = function () {
@@ -50,6 +62,12 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 	    $scope.problem += ' (' + term_to_str($scope.prob.binomial[0]);
 	    $scope.problem += ' ' + $scope.prob.op + ' ';
 	    $scope.problem += term_to_str($scope.prob.binomial[1]) + ')';
+
+	    var prob_str = term_to_str($scope.prob.monomial, true) + '*('
+		+ term_to_str($scope.prob.binomial[0], true) + $scope.prob.op
+		+ term_to_str($scope.prob.binomial[1], true) + ')';
+
+	    $scope.prob.parsed = math.parse(add_star(prob_str));
 	};
 
 	$scope.check = function () {
@@ -60,10 +78,21 @@ angular.module('problems', ['ngMaterial', 'ngSanitize'])
 	    }
 
 	    /* check answer */
-	    // parse coeff
-	    // parse variable
-	    // parse exponent if exists
-	    if (false) {
+	    var ans_parsed = math.parse(add_star($scope.answer));
+
+	    var correct = true;
+	    var ans_dict = {};
+	    for (var i = 0; i < 100; i++) {
+		for (var j = 0; j < vars.length; j++)
+		    ans_dict[vars[j]] = rand_num(-100, 100);
+
+		if (ans_parsed.eval(ans_dict) !== $scope.prob.parsed.eval(ans_dict)) {
+		    correct = false;
+		    break;
+		}
+	    }
+
+	    if (correct) {
 		if ($scope.status !== 2)
 		    $scope.status = 2;
 		else
